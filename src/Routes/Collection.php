@@ -64,17 +64,7 @@ class Collection extends \Illuminate\Support\Collection
         $host    = $route->domain();
         $methods = $route->methods();
         $uri     = $route->uri();
-        $name    = $route->getName();
-        $action  = $route->getActionName();
         $laroute = array_get($route->getAction(), 'laroute', null);
-
-        if(!empty($namespace)) {
-            $a = $route->getAction();
-
-            if(isset($a['controller'])) {
-                $action = str_replace($namespace.'\\', '', $action);
-            }
-        }
 
         switch ($filter) {
             case 'all':
@@ -85,7 +75,7 @@ class Collection extends \Illuminate\Support\Collection
                 break;
         }
 
-        return compact('host', 'methods', 'uri', 'name', 'action');
+        return compact('host', 'methods', 'uri', 'name');
     }
 
 }
