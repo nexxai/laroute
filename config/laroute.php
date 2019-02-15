@@ -5,25 +5,25 @@ return [
     /*
      * The destination path for the javascript file.
      */
-    'path' => 'public/js',
+    'path'             => 'resources/js',
 
     /*
      * The destination filename for the javascript file.
      */
-    'filename' => 'laroute',
+    'filename'         => 'laroute',
 
     /*
      * The namespace for the helper functions. By default this will bind them to
      * `window.laroute`.
      */
-    'namespace' => 'laroute',
+    'namespace'        => 'laroute',
 
     /*
      * Generate absolute URLs
      *
      * Set the Application URL in config/app.php
      */
-    'absolute' => false,
+    'absolute'         => false,
 
     /*
      * The Filter Method
@@ -32,7 +32,7 @@ return [
      * 'only' => Only "'laroute' => true" routes
      * 'force' => All routes, ignored "laroute" route parameter
      */
-    'filter' => 'all',
+    'filter'           => 'all',
 
     /*
      * Controller Namespace
@@ -47,12 +47,20 @@ return [
      * the ported helper Laravel url/route functions and the route data to go
      * with them.
      */
-    'template' => 'vendor/lord/laroute/src/templates/laroute.js',
-    
+    'template'         => [
+        'js'   => 'vendor/jojo/laroute/src/templates/laroute.js',
+        'json' => 'vendor/jojo/laroute/src/templates/laroute.json',
+    ],
+
     /*
      * Appends a prefix to URLs. By default the prefix is an empty string.
     *
     */
-    'prefix' => '',
+    'prefix'           => '',
+
+    /*
+     * Default generated file type (js, json)
+    */
+    'type'             => 'js',
 
 ];

@@ -12,6 +12,9 @@ use Symfony\Component\Console\Input\InputOption;
 
 class LarouteGeneratorCommand extends Command
 {
+    const TYPE_JS   = 'js';
+    const TYPE_JSON = 'json';
+
     /**
      * The console command name.
      *
@@ -87,10 +90,20 @@ class LarouteGeneratorCommand extends Command
      * Get path to the template file.
      *
      * @return string
+     * @throws \Exception
      */
     protected function getTemplatePath()
     {
-        return $this->config->get('laroute.template');
+        $type = $this->getOptionOrConfig('type');
+        switch ($type) {
+            case self::TYPE_JS || self::TYPE_JSON:
+                return $this->config->get("laroute.template.{$type}");
+                break;
+            default:
+                $this->error("Unknown type: {$type}");
+                throw new \Exception("Unknown type: {$type}");
+                break;
+        }
     }
 
     /**
@@ -119,8 +132,9 @@ class LarouteGeneratorCommand extends Command
     {
         $path     = $this->getOptionOrConfig('path');
         $filename = $this->getOptionOrConfig('filename');
+        $type     = $this->getOptionOrConfig('type');
 
-        return "{$path}/{$filename}.js";
+        return "{$path}/{$filename}.{$type}";
     }
 
     /**
@@ -168,6 +182,11 @@ class LarouteGeneratorCommand extends Command
                 'prefix',
                 'pr',
                 InputOption::VALUE_OPTIONAL, sprintf('Prefix for the generated URLs (default: "%s")', $this->config->get('laroute.prefix'))
+            ],
+            [
+                'type',
+                't',
+                InputOption::VALUE_OPTIONAL, sprintf('Generated file type ("%s":default, "%s")', self::TYPE_JS, self::TYPE_JSON)
             ],
         ];
     }

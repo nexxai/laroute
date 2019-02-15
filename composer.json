@@ -1,12 +1,12 @@
 {
-    "name": "lord/laroute",
-    "description": "Access Laravels URL/Route helper functions, from JavaScript.",
-    "keywords"  : ["laravel", "routes", "routing", "javascript"],
-    "authors": [
-        {
-            "name": "Aaron Lord",
-            "email": "hello@aaronlord.is"
-        }
+    "name": "jojo/laroute",
+    "description": "Access Laravels URL/Route helper functions, from JavaScript or routes from JSON",
+    "keywords": [
+        "laravel",
+        "routes",
+        "routing",
+        "javascript",
+        "json"
     ],
     "license" : "MIT",
     "require": {
@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Lord\\Laroute\\": "src/"
+            "Jojo\\Laroute\\": "src/"
         }
     },
     "minimum-stability": "dev"
