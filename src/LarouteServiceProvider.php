@@ -1,10 +1,10 @@
 <?php
 
-namespace Lord\Laroute;
+namespace Jojo\Laroute;
 
 use Illuminate\Support\ServiceProvider;
-use Lord\Laroute\Console\Commands\LarouteGeneratorCommand;
-use Lord\Laroute\Routes\Collection as Routes;
+use Jojo\Laroute\Console\Commands\LarouteGeneratorCommand;
+use Jojo\Laroute\Routes\Collection as Routes;
 
 class LarouteServiceProvider extends ServiceProvider
 {
@@ -54,8 +54,8 @@ class LarouteServiceProvider extends ServiceProvider
     protected function registerGenerator()
     {
         $this->app->bind(
-            'Lord\Laroute\Generators\GeneratorInterface',
-            'Lord\Laroute\Generators\TemplateGenerator'
+            'Jojo\Laroute\Generators\GeneratorInterface',
+            'Jojo\Laroute\Generators\TemplateGenerator'
         );
     }
 
@@ -67,8 +67,8 @@ class LarouteServiceProvider extends ServiceProvider
     protected function registerCompiler()
     {
         $this->app->bind(
-            'Lord\Laroute\Compilers\CompilerInterface',
-            'Lord\Laroute\Compilers\TemplateCompiler'
+            'Jojo\Laroute\Compilers\CompilerInterface',
+            'Jojo\Laroute\Compilers\TemplateCompiler'
         );
     }
 
@@ -82,9 +82,9 @@ class LarouteServiceProvider extends ServiceProvider
         $this->app->singleton(
             'command.laroute.generate',
             function ($app) {
-                $config     = $app['config'];
-                $routes     = new Routes($app['router']->getRoutes(), $config->get('laroute.filter', 'all'), $config->get('laroute.action_namespace', ''));
-                $generator  = $app->make('Lord\Laroute\Generators\GeneratorInterface');
+                $config    = $app['config'];
+                $routes    = new Routes($app['router']->getRoutes(), $config->get('laroute.filter', 'all'), $config->get('laroute.action_namespace', ''));
+                $generator = $app->make('Jojo\Laroute\Generators\GeneratorInterface');
 
                 return new LarouteGeneratorCommand($config, $routes, $generator);
             }

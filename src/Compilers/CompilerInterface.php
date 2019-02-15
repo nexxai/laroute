@@ -1,6 +1,6 @@
 <?php
 
-namespace Lord\Laroute\Compilers;
+namespace Jojo\Laroute\Compilers;
 
 interface CompilerInterface
 {
