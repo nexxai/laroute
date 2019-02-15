@@ -10,7 +10,7 @@ Install the usual [composer](https://getcomposer.org/) way.
 ```json
 {
 	"require" : {
-		"lord/laroute" : "2.*"
+		"jojo/laroute" : "2.*"
 	}
 }
 ```
@@ -23,7 +23,7 @@ n.b Laravel 4.x users, check out [version 1.3.2](https://github.com/aaronlord/la
 	
 	'providers' => array(
 		...
-		Lord\Laroute\LarouteServiceProvider::class,
+		Jojo\Laroute\LarouteServiceProvider::class,
 	],
 	
 	...
@@ -34,10 +34,10 @@ n.b Laravel 4.x users, check out [version 1.3.2](https://github.com/aaronlord/la
 Copy the packages config files.
 
 ```
-php artisan vendor:publish --provider='Lord\Laroute\LarouteServiceProvider'
+php artisan vendor:publish --provider='Jojo\Laroute\LarouteServiceProvider'
 ```
 
-###### app/config/packages/lord/laroute/config.php
+###### app/config/packages/jojo/laroute/config.php
 
 ```php
 
@@ -46,37 +46,37 @@ return [
     /*
      * The destination path for the javascript file.
      */
-    'path' => 'public/js',
+    'path'             => 'resources/js',
 
     /*
      * The destination filename for the javascript file.
      */
-    'filename' => 'laroute',
+    'filename'         => 'laroute',
 
     /*
      * The namespace for the helper functions. By default this will bind them to
      * `window.laroute`.
      */
-    'namespace' => 'laroute',
+    'namespace'        => 'laroute',
 
     /*
      * Generate absolute URLs
      *
      * Set the Application URL in config/app.php
      */
-    'absolute' => false,
+    'absolute'         => false,
 
     /*
-     * The Filter Methode
+     * The Filter Method
      *
      * 'all' => All routes except "'laroute' => false"
      * 'only' => Only "'laroute' => true" routes
      * 'force' => All routes, ignored "laroute" route parameter
      */
-    'filter' => 'all',
+    'filter'           => 'all',
 
     /*
-     * Action Namespace
+     * Controller Namespace
      *
      * Set here your controller namespace (see RouteServiceProvider -> $namespace) for cleaner action calls
      * e.g. 'App\Http\Controllers'
@@ -88,15 +88,24 @@ return [
      * the ported helper Laravel url/route functions and the route data to go
      * with them.
      */
-    'template' => 'vendor/lord/laroute/src/templates/laroute.js',
-    
+    'template'         => [
+        'js'   => 'vendor/jojo/laroute/src/templates/laroute.js',
+        'json' => 'vendor/jojo/laroute/src/templates/laroute.json',
+    ],
+
     /*
      * Appends a prefix to URLs. By default the prefix is an empty string.
     *
     */
-    'prefix' => '',
+    'prefix'           => '',
+
+    /*
+     * Default generated file type (js, json)
+    */
+    'type'             => 'js',
 
 ];
+
 
     
 ```
@@ -109,11 +118,7 @@ To access the routes, we need to "port" them over to a JavaScript file:
 php artisan laroute:generate
 ```
 
-With the default configuration, this will create a `public/js/laroute.js` file to include in your page, or build.
-
-```html
-<script src="/js/laroute.js"></script>
-```
+With the default configuration, this will create a `resources/js/laroute.js` file to include in your page, or build.
 
 **Note: You'll have to `laroute:generate` if you change your routes.**
 
@@ -239,4 +244,4 @@ Route::group(['laroute' => false], function () {
 
 ## Licence
 
-[View the licence in this repo.](https://github.com/aaronlord/laroute/blob/master/LICENSE)
+[View the licence in origin (aaronlord/laroute) repo.](https://github.com/aaronlord/laroute/blob/master/LICENSE)
