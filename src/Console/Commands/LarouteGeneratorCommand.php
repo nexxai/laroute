@@ -8,6 +8,7 @@ use Jojo\Laroute\Generators\GeneratorInterface as Generator;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command;
 
+use Jojo\Laroute\Routes\Collection;
 use Symfony\Component\Console\Input\InputOption;
 
 class LarouteGeneratorCommand extends Command
@@ -21,6 +22,13 @@ class LarouteGeneratorCommand extends Command
      * @var string
      */
     protected $name = 'laroute:generate';
+
+    /**
+     * The console command signature.
+     *
+     * @var string
+     */
+    protected $signature = 'laroute:generate {routes?}';
 
     /**
      * The console command description.
@@ -94,6 +102,10 @@ class LarouteGeneratorCommand extends Command
      */
     protected function getTemplatePath()
     {
+        if ($this->hasOption('tp')) {
+            return $this->option('tp');
+        }
+
         $type = $this->getOptionOrConfig('type');
         switch ($type) {
             case self::TYPE_JS || self::TYPE_JSON:
@@ -113,13 +125,30 @@ class LarouteGeneratorCommand extends Command
      */
     protected function getTemplateData()
     {
-        $namespace  = $this->getOptionOrConfig('namespace');
-        $routes     = $this->routes->toJSON();
-        $absolute   = $this->config->get('laroute.absolute', false);
-        $rootUrl    = $this->config->get('app.url', '');
-        $prefix		= $this->config->get('laroute.prefix', '');
+        $namespace = $this->getOptionOrConfig('namespace');
+        $routes    = $this->getRouteCollection()->toJSON();
+        $absolute  = $this->config->get('laroute.absolute', false);
+        $rootUrl   = $this->config->get('app.url', '');
+        $prefix    = $this->config->get('laroute.prefix', '');
 
         return compact('namespace', 'routes', 'absolute', 'rootUrl', 'prefix');
+    }
+
+    /**
+     * Get the route collection.
+     *
+     * @return Collection
+     */
+    protected function getRouteCollection()
+    {
+        $routes = $this->argument('routes');
+
+        if (!($routes instanceof Collection)) {
+            return $this->routes;
+        }
+
+        $this->routes = $routes;
+        return $this->routes;
     }
 
 
@@ -146,8 +175,8 @@ class LarouteGeneratorCommand extends Command
      */
     protected function getOptionOrConfig($key)
     {
-        if ($option = $this->option($key)) {
-            return $option;
+        if ($this->hasOption($key)) {
+            return $this->option($key);
         }
 
         return $this->config->get("laroute.{$key}");
@@ -165,7 +194,7 @@ class LarouteGeneratorCommand extends Command
                 'path',
                 'p',
                 InputOption::VALUE_OPTIONAL,
-                sprintf('Path to the javscript assets directory (default: "%s")', $this->config->get('laroute.path'))
+                sprintf('Path to the javascript assets directory (default: "%s")', $this->config->get('laroute.path'))
             ],
             [
                 'filename',
@@ -187,6 +216,11 @@ class LarouteGeneratorCommand extends Command
                 'type',
                 't',
                 InputOption::VALUE_OPTIONAL, sprintf('Generated file type ("%s":default, "%s")', self::TYPE_JS, self::TYPE_JSON)
+            ],
+            [
+                'template-path',
+                'tp',
+                InputOption::VALUE_OPTIONAL, sprintf('Custom path to a template (default: "%s")', $this->config->get("laroute.template.{$this->config->get("laroute.type")}"))
             ],
         ];
     }
