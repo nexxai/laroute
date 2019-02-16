@@ -64,6 +64,7 @@ class Collection extends \Illuminate\Support\Collection
         $host    = $route->domain();
         $methods = $route->methods();
         $uri     = $route->uri();
+        $name    = $route->getName();
         $laroute = array_get($route->getAction(), 'laroute', null);
 
         switch ($filter) {
