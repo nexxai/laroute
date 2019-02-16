@@ -24,13 +24,6 @@ class LarouteGeneratorCommand extends Command
     protected $name = 'laroute:generate';
 
     /**
-     * The console command signature.
-     *
-     * @var string
-     */
-    protected $signature = 'laroute:generate {routes?}';
-
-    /**
      * The console command description.
      *
      * @var string
@@ -102,11 +95,8 @@ class LarouteGeneratorCommand extends Command
      */
     protected function getTemplatePath()
     {
-        if ($this->hasOption('tp')) {
-            return $this->option('tp');
-        }
-
         $type = $this->getOptionOrConfig('type');
+
         switch ($type) {
             case self::TYPE_JS || self::TYPE_JSON:
                 return $this->config->get("laroute.template.{$type}");
@@ -175,11 +165,26 @@ class LarouteGeneratorCommand extends Command
      */
     protected function getOptionOrConfig($key)
     {
-        if ($this->hasOption($key)) {
-            return $this->option($key);
+        if ($option = $this->option($key)) {
+            return $option;
         }
 
         return $this->config->get("laroute.{$key}");
+    }
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [
+            [
+                'routes',
+                InputOption::VALUE_OPTIONAL,
+            ]
+        ];
     }
 
     /**
@@ -216,11 +221,6 @@ class LarouteGeneratorCommand extends Command
                 'type',
                 't',
                 InputOption::VALUE_OPTIONAL, sprintf('Generated file type ("%s":default, "%s")', self::TYPE_JS, self::TYPE_JSON)
-            ],
-            [
-                'template-path',
-                'tp',
-                InputOption::VALUE_OPTIONAL, sprintf('Custom path to a template (default: "%s")', $this->config->get("laroute.template.{$this->config->get("laroute.type")}"))
             ],
         ];
     }
