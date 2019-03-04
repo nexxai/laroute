@@ -65,7 +65,7 @@ class Collection extends \Illuminate\Support\Collection
         $methods = $route->methods();
         $uri     = $route->uri();
         $name    = $route->getName();
-        $laroute = Arr::get($route->getAction(), 'laroute', null);
+        $laroute = array_get($route->getAction(), 'laroute', null);
 
         switch ($filter) {
             case 'all':
