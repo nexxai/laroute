@@ -26,5 +26,12 @@
             "Jojo\\Laroute\\": "src/"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jojo\\Laroute\\LarouteServiceProvider"
+            ]
+        }
+    }
 }
